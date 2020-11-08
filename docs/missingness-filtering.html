@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtreebb60448212f4bef88b52541dd7d15d5a4dddaa67targetblankbb60448a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/hwittich/GWAS_QC/tree/bb60448212f4bef88b52541dd7d15d5a4dddaa67" target="_blank">bb60448</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtreea588ef7b3cbc80aadf5f5f1ba8eb013800280531targetblanka588ef7a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/hwittich/GWAS_QC/tree/a588ef7b3cbc80aadf5f5f1ba8eb013800280531" target="_blank">a588ef7</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtreebb60448212f4bef88b52541dd7d15d5a4dddaa67targetblankbb60448a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtreea588ef7b3cbc80aadf5f5f1ba8eb013800280531targetblanka588ef7a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/hwittich/GWAS_QC/tree/bb60448212f4bef88b52541dd7d15d5a4dddaa67" target="_blank">bb60448</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/hwittich/GWAS_QC/tree/a588ef7b3cbc80aadf5f5f1ba8eb013800280531" target="_blank">a588ef7</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,6 +521,7 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
 
 </code></pre>
 <p>
@@ -559,6 +560,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/a588ef7b3cbc80aadf5f5f1ba8eb013800280531/analysis/missingness-filtering.Rmd" target="_blank">a588ef7</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-11-08
+</td>
+<td>
+Attempted to perform Hardy-Weinberg filtering but I’ve run into some issues.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/hwittich/GWAS_QC/6997f064db845c4be26f0e888b0b8592235357ad/docs/missingness-filtering.html" target="_blank">6997f06</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-11-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -613,6 +648,43 @@ This file type includes SNP level missingness<br />
 <pre class="r"><code>lmiss &lt;- read.table(&quot;~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/01initial_missingness.lmiss&quot;, header = T)
 hist(lmiss$F_MISS)</code></pre>
 <p><img src="figure/missingness-filtering.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
+Past versions of unnamed-chunk-1-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/6997f064db845c4be26f0e888b0b8592235357ad/docs/figure/missingness-filtering.Rmd/unnamed-chunk-1-1.png" target="_blank">6997f06</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-11-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#The F_MISS header in the lmiss file contains the proportion of the sample set missing for the SNP</code></pre>
 <pre class="r"><code>##SNP count at start
 dim(lmiss)[1]</code></pre>
@@ -632,6 +704,43 @@ table(lmiss$F_MISS&lt;0.01)/sum(table(lmiss$F_MISS&lt;0.01))</code></pre>
 imiss &lt;- read.table(&quot;~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/01initial_missingness.imiss&quot;, header = T)
 hist(imiss$F_MISS)</code></pre>
 <p><img src="figure/missingness-filtering.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/6997f064db845c4be26f0e888b0b8592235357ad/docs/figure/missingness-filtering.Rmd/unnamed-chunk-5-1.png" target="_blank">6997f06</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-11-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#The F_MISS header in the imiss files contains the proportion of SNPs missing for each individual in the sample set.</code></pre>
 </div>
 <div id="create-new-bfiles-based-on-missingness-threshold" class="section level1">
@@ -660,6 +769,43 @@ hist(imiss$F_MISS)</code></pre>
 <pre class="r"><code>newlmiss &lt;- read.table(&quot;~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/03missingness_validation.lmiss&quot;, header = T)
 hist(newlmiss$F_MISS)</code></pre>
 <p><img src="figure/missingness-filtering.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/6997f064db845c4be26f0e888b0b8592235357ad/docs/figure/missingness-filtering.Rmd/unnamed-chunk-6-1.png" target="_blank">6997f06</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-11-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>##SNP and individual count after rm low-call SNPs
 dim(newlmiss)[1]</code></pre>
 <pre><code>[1] 1156710</code></pre>
@@ -667,7 +813,89 @@ dim(newlmiss)[1]</code></pre>
 <pre><code>[1] 1184</code></pre>
 <pre class="r"><code>newimiss &lt;- read.table(&quot;~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/03missingness_validation.imiss&quot;, header = T)
 hist(newimiss$F_MISS)</code></pre>
-<p><img src="figure/missingness-filtering.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /> Looks good!</p>
+<p><img src="figure/missingness-filtering.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
+Past versions of unnamed-chunk-9-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/6997f064db845c4be26f0e888b0b8592235357ad/docs/figure/missingness-filtering.Rmd/unnamed-chunk-9-1.png" target="_blank">6997f06</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-11-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Looks good!</p>
+</div>
+<div id="calculate-and-plot-hardy-weinberg-equilibrium-statistics" class="section level1">
+<h1>5 Calculate and plot Hardy-Weinberg Equilibrium statistics</h1>
+<p>Our final step in filtering these data involves calculating Hardy-Weinberg statistics for each individual in the sample population. SNPs out of HWE could either be the result of a genotyping error or a significant association, therefore it is important to consider HWE in GWAS studies. The following command will generate the Hardy-Weinberg statistics for the sample population:</p>
+<pre><code>plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/02geno_0.01_filtered --hardy --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/04initial_HWE_stats</code></pre>
+<p>Producing the following output files:<br />
+– 04initial_HWE_stats.hwe<br />
+– 04initial_HWE_stats.log</p>
+<p>Next, we will plot the distribution of the Hardy-Weinberg statistics.</p>
+<pre class="r"><code>hwe &lt;- read.table(&quot;~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/04initial_HWE_stats.hwe&quot;, header = T)
+hist(hwe$P)</code></pre>
+<p><img src="figure/missingness-filtering.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#The P column in the hwe file contains the Hardy-Weinberg equilibrium exact test p-value</code></pre>
+<pre class="r"><code>##SNPs with Hardy-Weinberg equilibrium exact test p-value below 1e-4
+table(hwe$P&lt;0.0001)</code></pre>
+<pre><code>
+ FALSE   TRUE 
+871456 285254 </code></pre>
+<pre class="r"><code>##SNPs with Hardy-Weinberg equilibrium exact test p-value below 1e-4
+table(hwe$P&lt;0.0001)/sum(table(hwe$P&lt;0.0001))</code></pre>
+<pre><code>
+    FALSE      TRUE 
+0.7533919 0.2466081 </code></pre>
+<p>Looking at this histogram, we want to keep most samples with a p-value close to 0, because this indicates that the SNPS follow Hardy-Weinberg equilibrium. Setting a cut off around 1e-4 might be too stringent, as we would lose almost 870,000 SNPs. How do I choose an appropriate ctuoff and which should I use in this case?</p>
+</div>
+<div id="filter-bfiles-by-hwe-pvalues-and-recalculate-statistics" class="section level1">
+<h1>6 Filter bfiles by hwe pvalues and recalculate statistics</h1>
+<pre><code>plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/02geno_0.01_filtered --hwe 0.0001 --make-bed --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE</code></pre>
+<p>The –hwe 0.0001 flag filters out all SNPs with a p-value above the 0.0001 cutoff.</p>
+<p>Producing the following output files:<br />
+– 05filtered_HWE.bed<br />
+– 05filtered_HWE.bim<br />
+– 05filtered_HWE.fam<br />
+– 05filtered_HWE.log</p>
+<p>Now we will recalculate the Hardy-Weinberg statistics on the new, filtered data and replot the distribution:</p>
+<pre><code>plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE --hardy --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/06final_HWE_stats</code></pre>
+<p>Producing the following outputs:<br />
+– 06final_HWE_stats.hwe<br />
+– 06final_HWE_stats.log</p>
+<pre class="r"><code>newhwe &lt;- read.table(&quot;~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/06final_HWE_stats.hwe&quot;, header = T)
+hist(newhwe$P)</code></pre>
+<p><img src="figure/missingness-filtering.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#The P column in the hwe file contains the Hardy-Weinberg equilibrium exact test p-value</code></pre>
+<p>This plot looks strange. It looks like we have filtered out all SNPs below the threshold, when, in fact, these are the SNPs we want to keep. The <a href="https://www.cog-genomics.org/plink/1.9/filter">PLINK 1.9 documentation</a> states that the –hwe flag “filters out all variants which have Hardy-Weinberg equilibrium exact test p-value below the provided threshold.” I’m unclear why this flag would behave this way, or if there is an alternative option to filter above the p-value threshold.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
