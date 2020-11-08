@@ -105,3 +105,54 @@ newimiss <- read.table("~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/03
 hist(newimiss$F_MISS)
 ```
 Looks good!
+
+# 5 Calculate and plot Hardy-Weinberg Equilibrium statistics
+Our final step in filtering these data involves calculating Hardy-Weinberg statistics for each individual in the sample population. SNPs out of HWE could either be the result of a genotyping error or a significant association, therefore it is important to consider HWE in GWAS studies. The following command will generate the Hardy-Weinberg statistics for the sample population:
+```{}
+plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/02geno_0.01_filtered --hardy --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/04initial_HWE_stats
+```
+Producing the following output files:  
+-- 04initial_HWE_stats.hwe  
+-- 04initial_HWE_stats.log  
+
+Next, we will plot the distribution of the Hardy-Weinberg statistics.
+```{r}
+hwe <- read.table("~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/04initial_HWE_stats.hwe", header = T)
+hist(hwe$P)
+#The P column in the hwe file contains the Hardy-Weinberg equilibrium exact test p-value
+```
+```{r}
+##SNPs with Hardy-Weinberg equilibrium exact test p-value below 1e-4
+table(hwe$P<0.0001)
+```
+```{r}
+##SNPs with Hardy-Weinberg equilibrium exact test p-value below 1e-4
+table(hwe$P<0.0001)/sum(table(hwe$P<0.0001))
+```
+Looking at this histogram, we want to keep most samples with a p-value close to 0, because this indicates that the SNPS follow Hardy-Weinberg equilibrium. Setting a cut off around 1e-4 might be too stringent, as we would lose almost 870,000 SNPs. How do I choose an appropriate ctuoff and which should I use in this case?
+
+# 6 Filter bfiles by hwe pvalues and recalculate statistics
+```{}
+plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/02geno_0.01_filtered --hwe 0.0001 --make-bed --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE
+```
+The --hwe 0.0001 flag filters out all SNPs with a p-value above the 0.0001 cutoff. 
+
+Producing the following output files:  
+-- 05filtered_HWE.bed  
+-- 05filtered_HWE.bim  
+-- 05filtered_HWE.fam  
+-- 05filtered_HWE.log  
+
+Now we will recalculate the Hardy-Weinberg statistics on the new, filtered data and replot the distribution:
+```{}
+plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE --hardy --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/06final_HWE_stats
+```
+Producing the following outputs:  
+-- 06final_HWE_stats.hwe  
+-- 06final_HWE_stats.log  
+```{r}
+newhwe <- read.table("~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/06final_HWE_stats.hwe", header = T)
+hist(newhwe$P)
+#The P column in the hwe file contains the Hardy-Weinberg equilibrium exact test p-value
+```
+This plot looks strange. It looks like we have filtered out all SNPs below the threshold, when, in fact, these are the SNPs we want to keep. The [PLINK 1.9 documentation](https://www.cog-genomics.org/plink/1.9/filter) states that the --hwe flag "filters out all variants which have Hardy-Weinberg equilibrium exact test p-value below the provided threshold." I'm unclear why this flag would behave this way, or if there is an alternative option to filter above the p-value threshold.
