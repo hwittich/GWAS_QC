@@ -11,5 +11,5 @@ editor_options:
 Welcome to my research website.
 
 
-[Step 00: Converting to plink format](file-formatting.html) 
+[Step 00: Converting to plink format](file-formatting.html)  
 [Step 01: Missingness Filtering](missingness-filtering.html)  
