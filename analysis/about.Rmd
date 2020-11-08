@@ -8,5 +8,3 @@ editor_options:
 ---
 
 This research website will track my recreation of the Wheeler lab's GWAS quality control (QC) pipeline. 
-
-[Step 00: Converting to plink format](file-formatting.html)  
