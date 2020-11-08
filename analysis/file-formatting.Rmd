@@ -1,0 +1,30 @@
+---
+title: "file-formatting"
+author: "Henry Wittich"
+date: "2020-11-08"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+The first step of the pipeline is to make sure all input files are in the correct format to perform quality control. 
+
+# Downloading Data
+For this example run of the GWAS_QC pipeline, I will be working with HapMap3 genotype data, downloaded from [link](ftp://ftp.ncbi.nlm.nih.gov/hapmap/genotypes/hapmap3/plink_format/draft_2).
+From this link, I downloaded the following files:  
+-- hapmap3_r2_b36_fwd.consensus.qc.poly.ped.bz2  
+-- hapmap3_r2_b36_fwd.consensus.qc.poly.map.bz2  
+These files contain "a consensus and polymorphic data set," including, "only SNPS that passed QC in all populations (i.e., monomorphic SNPS across the entire data set were removed)"
+
+# Converting to bed/bim/fam
+Since my desired file format is bed/bim/fam, but I currently have ped and map files, I have to convert them with the following plink command.
+```{}
+plink --file ~/gwasqc/data/hapmap3_r2_b36_fwd.consensus.qc.poly --make-bed --out ~/gwasqc/data/hapmap3
+```
+This produced the following output files:  
+-- hapmap3.bed   
+-- hapmap3.bim  
+-- hapmap3.fam  
+-- hapmap3.hh  
+-- hapmap3.log  
