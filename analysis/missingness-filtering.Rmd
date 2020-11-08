@@ -1,0 +1,107 @@
+---
+title: "missingness-filtering"
+author: "Henry Wittich"
+date: "2020-11-08"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+The first step of the pipeline is to filter the genotype data based on missingness. Missingness is defined as 1-efficiency, and genotyping efficiency, otherwise known as the call rate, is defined as the proportion of samples with a genotype call for each marker. A poor marker will have a low efficiency, meaning that the SNP assay failed for many DNA samples, and thus resulting in inaccurate genotype calling for the marker. 
+
+This process is divided into 6 steps, which can all be run at once by calling the "01MissingnessFiltering" script, but I will be performing each step individually using plink commands.
+
+# 0 Optional prefiltering step
+When converting the data into bed/bim/fam file formats, some of the data was put into a heterozygous haploid and nonmale Y chromosome call list (.hh file). The data pushed into this file either contains heterozygous calls where they shouldn't be possible or nonmissing calls for nonmales on the Y chromosome. For this reason, it would be beneficial to filter this data out at the start. This can be accomplished using the --autosome flag with plink:
+```{}
+plink --bed ~/gwasqc/data/hapmap3.bed --bim ~/gwasqc/data/hapmap3.bim --fam ~/gwasqc/data/hapmap3.fam --autosome --make-bed --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/00autosome
+```
+Producing the following output files:  
+-- 00autosome.bed  
+-- 00autosome.bim  
+-- 00autosome.fam  
+-- 00autosome.log  
+
+# 1 Determination of initial missingness benchmark
+This steps provides an estimate of the call rate of individual SNPs in the data. This was completed with the following command:
+```{}
+plink --bed ~/gwasqc/output/11-8-2020/missingness_hwe_steps/00autosome.bed --bim ~/gwasqc/output/11-8-2020/missingness_hwe_steps/00autosome.bim --fam ~/gwasqc/output/11-8-2020/missingness_hwe_steps/00autosome.fam --missing --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/01initial_missingness
+```
+The --bed, --bim, and --fam flags all specify the input files, while the --missing flag specifies that we want to calculate missingness, thus producing lmiss and imiss output files.
+
+Producing these output files:  
+-- 01initial_missingness.imiss  
+This file type includes individual level missingness  
+-- 01initial_missingness.lmiss  
+This file type includes SNP level missingness  
+-- 01initial_missingness.log  
+
+Next, I will plot a histogram of the missingness data to get a feel for how these data are distributed. This will aid in determining an apprropriate missingness cutoff that won't remove too many samples from the dataset.  
+```{r}
+lmiss <- read.table("~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/01initial_missingness.lmiss", header = T)
+hist(lmiss$F_MISS)
+#The F_MISS header in the lmiss file contains the proportion of the sample set missing for the SNP
+```
+```{r}
+##SNP count at start
+dim(lmiss)[1]
+```
+```{r}
+##SNPs with call rates > 99%
+table(lmiss$F_MISS<0.01)
+```
+```{r}
+##percent SNPs with call rates > 99%
+table(lmiss$F_MISS<0.01)/sum(table(lmiss$F_MISS<0.01))
+```
+Looking at the data, most of the SNPs fall within 0.01 missingness, thus this is likely a good threshold for SNP level missingness.
+```{r}
+##after removing SNPs with < 99% call rates, look at sample F_MISS (proportion of missing SNPs)
+imiss <- read.table("~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/01initial_missingness.imiss", header = T)
+hist(imiss$F_MISS)
+#The F_MISS header in the imiss files contains the proportion of SNPs missing for each individual in the sample set.
+```
+
+# 2 Create new bfiles based on missingness threshold
+Now that we have determined an appropriate missingness threshold based on the call rate distribution of our data, we can generate filtered bed/bim/fam files with the following command:
+```{}
+plink --bed ~/gwasqc/output/11-8-2020/missingness_hwe_steps/00autosome.bed --bim ~/gwasqc/output/11-8-2020/missingness_hwe_steps/00autosome.bim --fam ~/gwasqc/output/11-8-2020/missingness_hwe_steps/00autosome.fam --geno 0.01 --maf 0.05 --make-bed --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/02geno_0.01_filtered
+```
+The --geno 0.01 flag filters out all SNPs with call rates <99%, while the --maf 0.05 flag filters out all SNPs with a minor allele frequency less than 0.05. 
+
+Producing these output files:  
+-- 02geno_0.01_filtered.bed  
+-- 02geno_0.01_filtered.bim  
+-- 02geno_0.01_filtered.fam  
+-- 02geno_0.01_filtered.log  
+
+# 3 Determine new missingness status after filtering
+This step repeats step 1, but on the new filtered bfiles.
+```{}
+plink --bed ~/gwasqc/output/11-8-2020/missingness_hwe_steps/02geno_0.01_filtered.bed --bim ~/gwasqc/output/11-8-2020/missingness_hwe_steps/02geno_0.01_filtered.bim --fam ~/gwasqc/output/11-8-2020/missingness_hwe_steps/02geno_0.01_filtered.fam --missing --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/03missingness_validation
+```
+Producing the following output files:  
+-- 03missingness_validation.imiss  
+-- 03missingness_validation.lmiss  
+-- 03missingness_validation.log  
+
+# 4 Plot generation and validation of call rate distribution
+Once again, I will plot a histogram of the lmiss and imiss files to examine the call rate distribution in the filtered data.
+```{r}
+newlmiss <- read.table("~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/03missingness_validation.lmiss", header = T)
+hist(newlmiss$F_MISS)
+```
+```{r}
+##SNP and individual count after rm low-call SNPs
+dim(newlmiss)[1]
+```
+```{r}
+dim(imiss)[1]
+```
+
+```{r}
+newimiss <- read.table("~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/03missingness_validation.imiss", header = T)
+hist(newimiss$F_MISS)
+```
+Looks good!
