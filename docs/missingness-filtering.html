@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-08
+<strong>Last updated:</strong> 2020-11-09
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,24 +504,24 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtreea588ef7b3cbc80aadf5f5f1ba8eb013800280531targetblanka588ef7a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/hwittich/GWAS_QC/tree/a588ef7b3cbc80aadf5f5f1ba8eb013800280531" target="_blank">a588ef7</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtree90c21d1585b095f1742b3a6da383ba36c6ef8d87targetblank90c21d1a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/hwittich/GWAS_QC/tree/90c21d1585b095f1742b3a6da383ba36c6ef8d87" target="_blank">90c21d1</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtreea588ef7b3cbc80aadf5f5f1ba8eb013800280531targetblanka588ef7a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtree90c21d1585b095f1742b3a6da383ba36c6ef8d87targetblank90c21d1a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/hwittich/GWAS_QC/tree/a588ef7b3cbc80aadf5f5f1ba8eb013800280531" target="_blank">a588ef7</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/hwittich/GWAS_QC/tree/90c21d1585b095f1742b3a6da383ba36c6ef8d87" target="_blank">90c21d1</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
 
 </code></pre>
 <p>
@@ -560,6 +560,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/90c21d1585b095f1742b3a6da383ba36c6ef8d87/analysis/missingness-filtering.Rmd" target="_blank">90c21d1</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-11-09
+</td>
+<td>
+Resolved some confusion over the hwe filtering step and altered the
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/hwittich/GWAS_QC/6a55d82410d733a33852679f324cdf549f0e327d/docs/missingness-filtering.html" target="_blank">6a55d82</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-11-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -864,23 +898,60 @@ Henry Wittich
 <pre class="r"><code>hwe &lt;- read.table(&quot;~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/04initial_HWE_stats.hwe&quot;, header = T)
 hist(hwe$P)</code></pre>
 <p><img src="figure/missingness-filtering.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
+Past versions of unnamed-chunk-10-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/6a55d82410d733a33852679f324cdf549f0e327d/docs/figure/missingness-filtering.Rmd/unnamed-chunk-10-1.png" target="_blank">6a55d82</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-11-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#The P column in the hwe file contains the Hardy-Weinberg equilibrium exact test p-value</code></pre>
-<pre class="r"><code>##SNPs with Hardy-Weinberg equilibrium exact test p-value below 1e-4
-table(hwe$P&lt;0.0001)</code></pre>
+<pre class="r"><code>##SNPs with Hardy-Weinberg equilibrium exact test p-value below 1e-6
+table(hwe$P&lt;0.000001)</code></pre>
 <pre><code>
  FALSE   TRUE 
-871456 285254 </code></pre>
-<pre class="r"><code>##SNPs with Hardy-Weinberg equilibrium exact test p-value below 1e-4
-table(hwe$P&lt;0.0001)/sum(table(hwe$P&lt;0.0001))</code></pre>
+975824 180886 </code></pre>
+<pre class="r"><code>##SNPs with Hardy-Weinberg equilibrium exact test p-value below 1e-6
+table(hwe$P&lt;0.000001)/sum(table(hwe$P&lt;0.0001))</code></pre>
 <pre><code>
     FALSE      TRUE 
-0.7533919 0.2466081 </code></pre>
-<p>Looking at this histogram, we want to keep most samples with a p-value close to 0, because this indicates that the SNPS follow Hardy-Weinberg equilibrium. Setting a cut off around 1e-4 might be too stringent, as we would lose almost 870,000 SNPs. How do I choose an appropriate ctuoff and which should I use in this case?</p>
+0.8436203 0.1563797 </code></pre>
+<p>This histogram plots the Hardy-Weinberg equilibrium exact test p-values for all SNPs in the dataset. The null hypothesis of the test is that a SNP is in HWE, and we expect most SNPs to be in HWE. For SNPs with low p-values, we would reject the null hypothesis and assume that they are not in HWE, which is more likely to be the result of a genotyping error that a natural occurence, so we would like to filter out SNPs with low p-values. However, we can see in the histogram that many of our SNPs have low p-values, thus we must set a very low p-value cutoff that would remove all problematic SNPs from the dataset without losing too many of our samples. Setting a cutoff around 1e-6 seems like it would be a good cutoff, only removing around 15% of SNPs from the dataset.</p>
 </div>
 <div id="filter-bfiles-by-hwe-pvalues-and-recalculate-statistics" class="section level1">
 <h1>6 Filter bfiles by hwe pvalues and recalculate statistics</h1>
-<pre><code>plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/02geno_0.01_filtered --hwe 0.0001 --make-bed --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE</code></pre>
-<p>The –hwe 0.0001 flag filters out all SNPs with a p-value above the 0.0001 cutoff.</p>
+<pre><code>plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/02geno_0.01_filtered --hwe 0.000001 --make-bed --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE</code></pre>
+<p>The –hwe 0.000001 flag filters out all SNPs with a p-value below the 0.000001 cutoff.</p>
 <p>Producing the following output files:<br />
 – 05filtered_HWE.bed<br />
 – 05filtered_HWE.bim<br />
@@ -894,8 +965,45 @@ table(hwe$P&lt;0.0001)/sum(table(hwe$P&lt;0.0001))</code></pre>
 <pre class="r"><code>newhwe &lt;- read.table(&quot;~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/06final_HWE_stats.hwe&quot;, header = T)
 hist(newhwe$P)</code></pre>
 <p><img src="figure/missingness-filtering.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-1">
+Past versions of unnamed-chunk-13-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-13-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/6a55d82410d733a33852679f324cdf549f0e327d/docs/figure/missingness-filtering.Rmd/unnamed-chunk-13-1.png" target="_blank">6a55d82</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-11-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#The P column in the hwe file contains the Hardy-Weinberg equilibrium exact test p-value</code></pre>
-<p>This plot looks strange. It looks like we have filtered out all SNPs below the threshold, when, in fact, these are the SNPs we want to keep. The <a href="https://www.cog-genomics.org/plink/1.9/filter">PLINK 1.9 documentation</a> states that the –hwe flag “filters out all variants which have Hardy-Weinberg equilibrium exact test p-value below the provided threshold.” I’m unclear why this flag would behave this way, or if there is an alternative option to filter above the p-value threshold.</p>
+<p>Looks good!</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
