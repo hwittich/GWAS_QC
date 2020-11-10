@@ -122,20 +122,20 @@ hist(hwe$P)
 #The P column in the hwe file contains the Hardy-Weinberg equilibrium exact test p-value
 ```
 ```{r}
-##SNPs with Hardy-Weinberg equilibrium exact test p-value below 1e-4
-table(hwe$P<0.0001)
+##SNPs with Hardy-Weinberg equilibrium exact test p-value below 1e-6
+table(hwe$P<0.000001)
 ```
 ```{r}
-##SNPs with Hardy-Weinberg equilibrium exact test p-value below 1e-4
-table(hwe$P<0.0001)/sum(table(hwe$P<0.0001))
+##SNPs with Hardy-Weinberg equilibrium exact test p-value below 1e-6
+table(hwe$P<0.000001)/sum(table(hwe$P<0.0001))
 ```
-Looking at this histogram, we want to keep most samples with a p-value close to 0, because this indicates that the SNPS follow Hardy-Weinberg equilibrium. Setting a cut off around 1e-4 might be too stringent, as we would lose almost 870,000 SNPs. How do I choose an appropriate ctuoff and which should I use in this case?
+This histogram plots the Hardy-Weinberg equilibrium exact test p-values for all SNPs in the dataset. The null hypothesis of the test is that a SNP is in HWE, and we expect most SNPs to be in HWE. For SNPs with low p-values, we would reject the null hypothesis and assume that they are not in HWE, which is more likely to be the result of a genotyping error that a natural occurence, so we would like to filter out SNPs with low p-values. However, we can see in the histogram that many of our SNPs have low p-values, thus we must set a very low p-value cutoff that would remove all problematic SNPs from the dataset without losing too many of our samples. Setting a cutoff around 1e-6 seems like it would be a good cutoff, only removing around 15% of SNPs from the dataset.
 
 # 6 Filter bfiles by hwe pvalues and recalculate statistics
 ```{}
-plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/02geno_0.01_filtered --hwe 0.0001 --make-bed --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE
+plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/02geno_0.01_filtered --hwe 0.000001 --make-bed --out ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE
 ```
-The --hwe 0.0001 flag filters out all SNPs with a p-value above the 0.0001 cutoff. 
+The --hwe 0.000001 flag filters out all SNPs with a p-value below the 0.000001 cutoff. 
 
 Producing the following output files:  
 -- 05filtered_HWE.bed  
@@ -155,4 +155,4 @@ newhwe <- read.table("~/mount/gwasqc/output/11-8-2020/missingness_hwe_steps/06fi
 hist(newhwe$P)
 #The P column in the hwe file contains the Hardy-Weinberg equilibrium exact test p-value
 ```
-This plot looks strange. It looks like we have filtered out all SNPs below the threshold, when, in fact, these are the SNPs we want to keep. The [PLINK 1.9 documentation](https://www.cog-genomics.org/plink/1.9/filter) states that the --hwe flag "filters out all variants which have Hardy-Weinberg equilibrium exact test p-value below the provided threshold." I'm unclear why this flag would behave this way, or if there is an alternative option to filter above the p-value threshold.
+Looks good!
