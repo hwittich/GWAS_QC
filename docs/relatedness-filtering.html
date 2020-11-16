@@ -444,16 +444,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtree9a7d97aa4ae2e1afb73a0606e0c2eb647405ed95targetblank9a7d97aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/hwittich/GWAS_QC/tree/9a7d97aa4ae2e1afb73a0606e0c2eb647405ed95" target="_blank">9a7d97a</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtreeaf53890d0a90be014ddf15414a4f87d312f3a096targetblankaf53890a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/hwittich/GWAS_QC/tree/af53890d0a90be014ddf15414a4f87d312f3a096" target="_blank">af53890</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtree9a7d97aa4ae2e1afb73a0606e0c2eb647405ed95targetblank9a7d97aa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtreeaf53890d0a90be014ddf15414a4f87d312f3a096targetblankaf53890a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/hwittich/GWAS_QC/tree/9a7d97aa4ae2e1afb73a0606e0c2eb647405ed95" target="_blank">9a7d97a</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/hwittich/GWAS_QC/tree/af53890d0a90be014ddf15414a4f87d312f3a096" target="_blank">af53890</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -462,9 +462,6 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Unstaged changes:
-    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -508,6 +505,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/af53890d0a90be014ddf15414a4f87d312f3a096/analysis/relatedness-filtering.Rmd" target="_blank">af53890</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-11-16
+</td>
+<td>
+updated formatting on website
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/hwittich/GWAS_QC/55ee1d1efc872e3f892c9269cf53ad1bcdf74f5d/docs/relatedness-filtering.html" target="_blank">55ee1d1</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-11-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/hwittich/GWAS_QC/blob/9a7d97aa4ae2e1afb73a0606e0c2eb647405ed95/analysis/relatedness-filtering.Rmd" target="_blank">9a7d97a</a>
 </td>
 <td>
@@ -530,7 +561,10 @@ Starting the relatedness filtering step
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>The purpose of this step is to remove related individuals from the dataset. When running a GWAS, you want to have as little relatedness as possible because related individuals will have similar SNPs and thus could produce false positive significant signals.</p>
-<p>#Create a pruned list of SNP IDs Given the size of our dataset, calculating % identity by descent between every individual in the dataset using every SNP would be time-consuming and ultimately inefficient. According to Turner et al., a “dataset only 100,000 markers will yield stable estimates of kinship coefficients.” In this first step of relatedness filtering, we will generate a pruned set of SNPs that are in linkage equilibrium. This serves two purpose: first, it creates a smaller set up SNPs to calculate IBD with, and it also sets us up for LD pruning.</p>
+</div>
+<div id="create-a-pruned-list-of-snp-ids" class="section level1">
+<h1>1 Create a pruned list of SNP IDs</h1>
+<p>Given the size of our dataset, calculating % identity by descent between every individual in the dataset using every SNP would be time-consuming and ultimately inefficient. According to Turner et al., a “dataset only 100,000 markers will yield stable estimates of kinship coefficients.” In this first step of relatedness filtering, we will generate a pruned set of SNPs that are in linkage equilibrium. This serves two purpose: first, it creates a smaller set up SNPs to calculate IBD with, and it also sets us up for LD pruning.</p>
 <pre><code>plink --bed ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bed --bim ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bim --fam ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.fam --indep-pairwise 50 5 0.3 --out ~/gwasqc/output/11-16-2020/relatedness_steps/01LD_prune_list</code></pre>
 <p>This command uses the HWE filtered list of SNPs and prunes them by linkage disequilibirum. the –indep-pairwise flag takes three parameters: the window size, the step size, and the r^2 threshold. In this case, plink looks at 50 variants at a time, moving through the dataset 5 variants at a time, and calculates the squared correlation between pairs of variants; if a pair of variants has an r^2 higher than the threshold, they are pruned from the window. SNPs that are in linkage equilibirum with each other are written to the prune.in file while those that are excluded are written to the prune.out file:<br />
 – 01LD_prune_list.log<br />
@@ -538,7 +572,7 @@ Starting the relatedness filtering step
 – 01LD_prune_list.prune.out</p>
 </div>
 <div id="determine-the-identity-by-descent-of-samples" class="section level1">
-<h1>Determine the identity by descent of samples</h1>
+<h1>2 Determine the identity by descent of samples</h1>
 </div>
 
 
