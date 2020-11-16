@@ -1,0 +1,23 @@
+---
+title: "relatedness-filtering"
+author: "Henry Wittich"
+date: "2020-11-16"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+The purpose of this step is to remove related individuals from the dataset. When running a GWAS, you want to have as little relatedness as possible because related individuals will have similar SNPs and thus could produce false positive significant signals.
+
+#Create a pruned list of SNP IDs
+Given the size of our dataset, calculating % identity by descent between every individual in the dataset using every SNP would be time-consuming and ultimately inefficient. According to Turner et al., a "dataset only 100,000 markers will yield stable estimates of kinship coefficients." In this first step of relatedness filtering, we will generate a pruned set of SNPs that are in linkage equilibrium. This serves two purpose: first, it creates a smaller set up SNPs to calculate IBD with, and it also sets us up for LD pruning.
+```{}
+plink --bed ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bed --bim ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bim --fam ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.fam --indep-pairwise 50 5 0.3 --out ~/gwasqc/output/11-16-2020/relatedness_steps/01LD_prune_list
+```
+This command uses the HWE filtered list of SNPs and prunes them by linkage disequilibirum. the --indep-pairwise flag takes three parameters: the window size, the step size, and the r^2 threshold. In this case, plink looks at 50 variants at a time, moving through the dataset 5 variants at a time, and calculates the squared correlation between pairs of variants; if a pair of variants has an r^2 higher than the threshold, they are pruned from the window. SNPs that are in linkage equilibirum with each other are written to the prune.in file while those that are excluded are written to the prune.out file:  
+-- 01LD_prune_list.log  
+-- 01LD_prune_list.prune.in  
+-- 01LD_prune_list.prune.out  
+
+# Determine the identity by descent of samples
