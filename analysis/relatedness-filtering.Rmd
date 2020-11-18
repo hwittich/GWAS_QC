@@ -11,13 +11,36 @@ editor_options:
 The purpose of this step is to remove related individuals from the dataset. When running a GWAS, you want to have as little relatedness as possible because related individuals will have similar SNPs and thus could produce false positive significant signals.
 
 # 1 Create a pruned list of SNP IDs
-Given the size of our dataset, calculating % identity by descent between every individual in the dataset using every SNP would be time-consuming and ultimately inefficient. According to Turner et al., a "dataset only 100,000 markers will yield stable estimates of kinship coefficients." In this first step of relatedness filtering, we will generate a pruned set of SNPs that are in linkage equilibrium. This serves two purpose: first, it creates a smaller set up SNPs to calculate IBD with, and it also sets us up for LD pruning.
+Given the size of our dataset, calculating % identity by descent between every individual in the dataset using every SNP would be time-consuming and ultimately inefficient. According to Turner et al., a "dataset only 100,000 markers will yield stable estimates of kinship coefficients." Furthermore, the IBD calculation assumes there is no LD. In this first step of relatedness filtering, we will generate a pruned set of SNPs that are in linkage equilibrium. This serves two purpose: first, it creates a smaller set up SNPs to calculate IBD with, and it also sets us up for LD pruning.
 ```{}
 plink --bed ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bed --bim ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bim --fam ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.fam --indep-pairwise 50 5 0.3 --out ~/gwasqc/output/11-16-2020/relatedness_steps/01LD_prune_list
 ```
-This command uses the HWE filtered list of SNPs and prunes them by linkage disequilibirum. the --indep-pairwise flag takes three parameters: the window size, the step size, and the r^2 threshold. In this case, plink looks at 50 variants at a time, moving through the dataset 5 variants at a time, and calculates the squared correlation between pairs of variants; if a pair of variants has an r^2 higher than the threshold, they are pruned from the window. SNPs that are in linkage equilibirum with each other are written to the prune.in file while those that are excluded are written to the prune.out file:  
+This command uses the HWE filtered list of SNPs and prunes them by linkage disequilibirum. the --indep-pairwise flag takes three parameters: the window size, the step size, and the r^2 threshold. In this case, plink looks at 50 variants at a time, moving through the dataset 5 variants at a time, and calculates the squared correlation between pairs of variants; if a pair of variants has an r^2 higher than the threshold, they are pruned from the window. In other words, for all SNPs in linkage disequilibrium with each other, all but one are pruned out of the dataset. SNPs that are in linkage equilibirum with each other are written to the prune.in file while those that are excluded are written to the prune.out file:  
 -- 01LD_prune_list.log  
 -- 01LD_prune_list.prune.in  
 -- 01LD_prune_list.prune.out  
 
 # 2 Determine the identity by descent of samples
+To gauge the number of related individuals in the dataset, we will be performing IBD calculations between every unique pair of individuals, using the pruned list of SNPs in linkage equilibrium. We can accomplish this with the plink --genome command:
+```{}
+plink --bed ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bed --bim ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bim --fam ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.fam --extract ~/gwasqc/output/11-16-2020/relatedness_steps/01LD_prune_list.prune.in --genome --out ~/gwasqc/output/11-16-2020/relatedness_steps/02relatedness.genome
+```
+Producing the following output files:  
+-- 02relatedness.genome.log  
+-- 02relatedness.genome.genome  
+First, the --extract flag uses the list of SNP IDs generated in step one to pull all SNPs that are in linkage equilibirum out of the bed/bim/fam files. The --genome flag performs an IBD calculation for each unique pair of individuals in the dataset. This calculation produces the Z0, Z1, and Z2 estimates, which represent the proportion of loci where the two individuals share zero, one, or two alleles identical by descent. These values can be used to infer the relationship between the two individuals:
+![Possible relationships](assets/IBD_relationships.png)
+Thus, by plotting the Z0 versus Z1 for every pair of individuals, we get a good snapshot of the relationships in our sample population. This is called an IBD plot. Here is the IBD plot for all individuals in the dataset.
+```{r}
+library("ggplot2")
+ibd <- read.table("~/mount/gwasqc/output/11-16-2020/relatedness_steps/02relatedness.genome.genome",header=T)
+#Color code each point by the relationship type given the fam and ped filefile
+ggplot(data=ibd,aes(x=Z0,y=Z1,color=RT))+geom_point(alpha=1/4)+theme_bw()
+```
+The relationship codes are as follows:  
+FS: full siblings  
+HS: half siblings  
+PO: parent-offspring  
+OT: other  
+UN: ?? (not stated in plink documentation, presumably is unrelated?)
+
