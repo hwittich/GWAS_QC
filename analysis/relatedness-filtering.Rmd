@@ -15,7 +15,7 @@ Given the size of our dataset, calculating % identity by descent between every i
 ```{}
 plink --bed ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bed --bim ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bim --fam ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.fam --indep-pairwise 50 5 0.3 --out ~/gwasqc/output/11-16-2020/relatedness_steps/01LD_prune_list
 ```
-This command uses the HWE filtered list of SNPs and prunes them by linkage disequilibirum. the --indep-pairwise flag takes three parameters: the window size, the step size, and the r^2 threshold. In this case, plink looks at 50 variants at a time, moving through the dataset 5 variants at a time, and calculates the squared correlation between pairs of variants; if a pair of variants has an r^2 higher than the threshold, they are pruned from the window. In other words, for all SNPs in linkage disequilibrium with each other, all but one are pruned out of the dataset. SNPs that are in linkage equilibirum with each other are written to the prune.in file while those that are excluded are written to the prune.out file:  
+This command uses the HWE filtered list of SNPs and prunes them by linkage disequilibirum. the --indep-pairwise flag takes three parameters: the window size, the step size, and the r^2 threshold. In this case, plink looks at 50 variants at a time and calculates the squared correlation between pairs of variants; if a pair of variants has an r^2 higher than the threshold, they are pruned from the window. Plonk then shifts the window by 5 variants and repeats the calculations. In other words, for all SNPs in linkage disequilibrium with each other, all but one are pruned out of the dataset. SNPs that are in linkage equilibirum with each other are written to the prune.in file while those that are excluded are written to the prune.out file:  
 -- 01LD_prune_list.log  
 -- 01LD_prune_list.prune.in  
 -- 01LD_prune_list.prune.out  
@@ -30,17 +30,156 @@ Producing the following output files:
 -- 02relatedness.genome.genome  
 First, the --extract flag uses the list of SNP IDs generated in step one to pull all SNPs that are in linkage equilibirum out of the bed/bim/fam files. The --genome flag performs an IBD calculation for each unique pair of individuals in the dataset. This calculation produces the Z0, Z1, and Z2 estimates, which represent the proportion of loci where the two individuals share zero, one, or two alleles identical by descent. These values can be used to infer the relationship between the two individuals:
 ![Possible relationships](assets/IBD_relationships.png)
+
 Thus, by plotting the Z0 versus Z1 for every pair of individuals, we get a good snapshot of the relationships in our sample population. This is called an IBD plot. Here is the IBD plot for all individuals in the dataset.
 ```{r}
 library("ggplot2")
 ibd <- read.table("~/mount/gwasqc/output/11-16-2020/relatedness_steps/02relatedness.genome.genome",header=T)
-#Color code each point by the relationship type given the fam and ped filefile
-ggplot(data=ibd,aes(x=Z0,y=Z1,color=RT))+geom_point(alpha=1/4)+theme_bw()
+ggplot(data=ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()
 ```
-The relationship codes are as follows:  
-FS: full siblings  
-HS: half siblings  
-PO: parent-offspring  
-OT: other  
-UN: ?? (not stated in plink documentation, presumably is unrelated?)
+Looking at the plot, it is clear that there are a few parent-child relationships in the dataset, as well as several siblings and cousins. Looking at the bottom right corner of the plot, there is a strange-looking gap in the cluster of non-related pairs. It is possible this is the result of the HapMap3 dataset being comprised of several populations from geographically distinct locations, resulting in strange relatedness estimates. 
 
+# 3 IBD separated by population
+We are working with HapMap 3 data, which contains 1,301 samples from 11 different populations. The phase_3_samples.doc [stored with the HapMap data](ftp://ftp.ncbi.nlm.nih.gov/hapmap/genotypes/hapmap3/plink_format/draft_2) lists the 11 populations and their corresponding 3-character labels, which are used in the relationships_w_pops_121708.txt file to identify samples by their population. For our purposes, we will group these 11 populations in 6 main groups:  
+-- African: ASW, LWK, MKK, and YRI  
+-- East Asian: CHB, CHD, and JPT  
+-- Northwestern European: CEU  
+-- Gujarati Indian: GIH  
+-- Mexican: MEX  
+-- Toscan: TSI  
+
+## Extracting sample IDs by population
+Next, we must create a list of sample IDs for each of the 6 population groups that we can use to pull out their data and generate IBD plots. We can accomplish this with the UNIX grep command: 
+```{}
+#Pulling out all samples from the Gujarati Indian population
+grep "GIH" relationships_w_pops_121708.txt > ~/gwasqc/output/12-13-2020/separating_populations/gujarati_indian_IDs.txt
+```
+The grep function takes 2 inputs: a string to search for and a file to search through. It searches through the file line by line and returns every line that contains the string. The ">" character writes grep's output to the file specified. With this command, I pulled out all of the samples in the dataset from the Gujarati Indian population and wrote their IDs to the file gujarati_indian_IDs.txt. 
+
+Let's do the same for every other population group:
+```{}
+#Pulling out all samples from African populations
+#When searching for multiple terms, the syntax is as follows: 'word1\|word2'
+grep 'ASW\|LWK\|MKK\|YRI' relationships_w_pops_121708.txt > ~/gwasqc/output/12-13-2020/separating_populations/african_IDs.txt
+
+#Pulling out all samples from East Asian populations
+grep 'CHB\|CHD\|JPT' relationships_w_pops_121708.txt > ~/gwasqc/output/12-13-2020/separating_populations/east_asian_IDs.txt
+
+#Pulling out all samples from the Northwestern European population
+grep "CEU" relationships_w_pops_121708.txt > ~/gwasqc/output/12-13-2020/separating_populations/northwestern_european_IDs.txt
+
+#Pulling out all samples from the Mexican population
+grep "MEX" relationships_w_pops_121708.txt > ~/gwasqc/output/12-13-2020/separating_populations/mexican_IDs.txt
+
+#Pulling out all samples from the Toscan population
+grep "TSI" relationships_w_pops_121708.txt > ~/gwasqc/output/12-13-2020/separating_populations/toscan_IDs.txt
+```
+
+## Creating new bfiles by population
+Using these lists of IDs, we can then extract the data for each sample and generate new bfiles, separated by population. Using the --keep and --make-bed plink commands, we can use our missingness- and hwe-filtered bfiles to make new bfiles that only keep individuals from the same population group.
+```{}
+#Generating Gujarati Indian bfiles
+plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE --keep ~/gwasqc/output/12-13-2020/separating_populations/gujarati_indian_IDs.txt --make-bed --out ~/gwasqc/output/12-13-2020/separating_populations/05gujarati_indian_filtered_HWE
+
+#Generating African bfiles
+plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE --keep ~/gwasqc/output/12-13-2020/separating_populations/african_IDs.txt --make-bed --out ~/gwasqc/output/12-13-2020/separating_populations/05african_filtered_HWE
+
+#Generating East Asian bfiles
+plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE --keep ~/gwasqc/output/12-13-2020/separating_populations/east_asian_IDs.txt --make-bed --out ~/gwasqc/output/12-13-2020/separating_populations/05east_asian_filtered_HWE
+
+#Generating Northwestern European bfiles
+plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE --keep ~/gwasqc/output/12-13-2020/separating_populations/northwestern_european_IDs.txt --make-bed --out ~/gwasqc/output/12-13-2020/separating_populations/05northwestern_european_filtered_HWE
+
+#Generating Mexican bfiles
+plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE --keep ~/gwasqc/output/12-13-2020/separating_populations/mexican_IDs.txt --make-bed --out ~/gwasqc/output/12-13-2020/separating_populations/05mexican_filtered_HWE
+
+#Generating Toscan bfiles
+plink --bfile ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE --keep ~/gwasqc/output/12-13-2020/separating_populations/toscan_IDs.txt --make-bed --out ~/gwasqc/output/12-13-2020/separating_populations/05toscan_filtered_HWE
+```
+
+## LD pruning, IBD calculation, and IBD plots by population
+### Gujarati Indian
+```{}
+#LD Pruning
+plink --bed ~/gwasqc/output/12-13-2020/separating_populations/05gujarati_indian_filtered_HWE.bed --bim ~/gwasqc/output/12-13-2020/separating_populations/05gujarati_indian_filtered_HWE.bim --fam ~/gwasqc/output/12-13-2020/separating_populations/05gujarati_indian_filtered_HWE.fam --indep-pairwise 50 5 0.3 --out ~/gwasqc/output/12-13-2020/relatedness_steps/01gujarati_indian_LD_prune_list
+
+#IBD Calculation
+plink --bed ~/gwasqc/output/12-13-2020/separating_populations/05gujarati_indian_filtered_HWE.bed --bim ~/gwasqc/output/12-13-2020/separating_populations/05gujarati_indian_filtered_HWE.bim --fam ~/gwasqc/output/12-13-2020/separating_populations/05gujarati_indian_filtered_HWE.fam --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01gujarati_indian_LD_prune_list.prune.in --genome --out ~/gwasqc/output/12-13-2020/relatedness_steps/02gujarati_indian_relatedness
+```
+```{r}
+#Generating IBD Plot
+gujarati_indian_ibd <- read.table("~/mount/gwasqc/output/12-13-2020/relatedness_steps/02gujarati_indian_relatedness.genome",header=T)
+ggplot(data=gujarati_indian_ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+xlim(0,1)+ylim(0,1)
+```
+
+### African
+```{}
+#LD Pruning
+plink --bed ~/gwasqc/output/12-13-2020/separating_populations/05african_filtered_HWE.bed --bim ~/gwasqc/output/12-13-2020/separating_populations/05african_filtered_HWE.bim --fam ~/gwasqc/output/12-13-2020/separating_populations/05african_filtered_HWE.fam --indep-pairwise 50 5 0.3 --out ~/gwasqc/output/12-13-2020/relatedness_steps/01african_LD_prune_list
+
+#IBD Calculation
+plink --bed ~/gwasqc/output/12-13-2020/separating_populations/05african_filtered_HWE.bed --bim ~/gwasqc/output/12-13-2020/separating_populations/05african_filtered_HWE.bim --fam ~/gwasqc/output/12-13-2020/separating_populations/05african_filtered_HWE.fam --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01african_LD_prune_list.prune.in --genome --out ~/gwasqc/output/12-13-2020/relatedness_steps/02african_relatedness
+```
+```{r}
+#Generating IBD Plot
+african_ibd <- read.table("~/mount/gwasqc/output/12-13-2020/relatedness_steps/02african_relatedness.genome",header=T)
+ggplot(data=african_ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+xlim(0,1)+ylim(0,1)
+```
+
+### East Asian
+```{}
+#LD Pruning
+plink --bed ~/gwasqc/output/12-13-2020/separating_populations/05east_asian_filtered_HWE.bed --bim ~/gwasqc/output/12-13-2020/separating_populations/05east_asian_filtered_HWE.bim --fam ~/gwasqc/output/12-13-2020/separating_populations/05east_asian_filtered_HWE.fam --indep-pairwise 50 5 0.3 --out ~/gwasqc/output/12-13-2020/relatedness_steps/01east_asian_LD_prune_list
+
+#IBD Calculation
+plink --bed ~/gwasqc/output/12-13-2020/separating_populations/05east_asian_filtered_HWE.bed --bim ~/gwasqc/output/12-13-2020/separating_populations/05east_asian_filtered_HWE.bim --fam ~/gwasqc/output/12-13-2020/separating_populations/05east_asian_filtered_HWE.fam --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01east_asian_LD_prune_list.prune.in --genome --out ~/gwasqc/output/12-13-2020/relatedness_steps/02east_asian_relatedness
+```
+```{r}
+#Generating IBD Plot
+east_asian_ibd <- read.table("~/mount/gwasqc/output/12-13-2020/relatedness_steps/02east_asian_relatedness.genome",header=T)
+ggplot(data=east_asian_ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+xlim(0,1)+ylim(0,1)
+```
+
+### Northwestern European
+```{}
+#LD Pruning
+plink --bed ~/gwasqc/output/12-13-2020/separating_populations/05northwestern_european_filtered_HWE.bed --bim ~/gwasqc/output/12-13-2020/separating_populations/05northwestern_european_filtered_HWE.bim --fam ~/gwasqc/output/12-13-2020/separating_populations/05northwestern_european_filtered_HWE.fam --indep-pairwise 50 5 0.3 --out ~/gwasqc/output/12-13-2020/relatedness_steps/01northwestern_european_LD_prune_list
+
+#IBD Calculation
+plink --bed ~/gwasqc/output/12-13-2020/separating_populations/05northwestern_european_filtered_HWE.bed --bim ~/gwasqc/output/12-13-2020/separating_populations/05northwestern_european_filtered_HWE.bim --fam ~/gwasqc/output/12-13-2020/separating_populations/05northwestern_european_filtered_HWE.fam --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01northwestern_european_LD_prune_list.prune.in --genome --out ~/gwasqc/output/12-13-2020/relatedness_steps/02northwestern_european_relatedness
+```
+```{r}
+#Generating IBD Plot
+northwestern_european_ibd <- read.table("~/mount/gwasqc/output/12-13-2020/relatedness_steps/02northwestern_european_relatedness.genome",header=T)
+ggplot(data=northwestern_european_ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+xlim(0,1)+ylim(0,1)
+```
+
+### Mexican
+```{}
+#LD Pruning
+plink --bed ~/gwasqc/output/12-13-2020/separating_populations/05mexican_filtered_HWE.bed --bim ~/gwasqc/output/12-13-2020/separating_populations/05mexican_filtered_HWE.bim --fam ~/gwasqc/output/12-13-2020/separating_populations/05mexican_filtered_HWE.fam --indep-pairwise 50 5 0.3 --out ~/gwasqc/output/12-13-2020/relatedness_steps/01mexican_LD_prune_list
+
+#IBD Calculation
+plink --bed ~/gwasqc/output/12-13-2020/separating_populations/05mexican_filtered_HWE.bed --bim ~/gwasqc/output/12-13-2020/separating_populations/05mexican_filtered_HWE.bim --fam ~/gwasqc/output/12-13-2020/separating_populations/05mexican_filtered_HWE.fam --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01mexican_LD_prune_list.prune.in --genome --out ~/gwasqc/output/12-13-2020/relatedness_steps/02mexican_relatedness
+```
+```{r}
+#Generating IBD Plot
+mexican_ibd <- read.table("~/mount/gwasqc/output/12-13-2020/relatedness_steps/02mexican_relatedness.genome",header=T)
+ggplot(data=mexican_ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+xlim(0,1)+ylim(0,1)
+```
+
+### Toscan
+```{}
+#LD Pruning
+plink --bed ~/gwasqc/output/12-13-2020/separating_populations/05toscan_filtered_HWE.bed --bim ~/gwasqc/output/12-13-2020/separating_populations/05toscan_filtered_HWE.bim --fam ~/gwasqc/output/12-13-2020/separating_populations/05toscan_filtered_HWE.fam --indep-pairwise 50 5 0.3 --out ~/gwasqc/output/12-13-2020/relatedness_steps/01toscan_LD_prune_list
+
+#IBD Calculation
+plink --bed ~/gwasqc/output/12-13-2020/separating_populations/05toscan_filtered_HWE.bed --bim ~/gwasqc/output/12-13-2020/separating_populations/05toscan_filtered_HWE.bim --fam ~/gwasqc/output/12-13-2020/separating_populations/05toscan_filtered_HWE.fam --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01toscan_LD_prune_list.prune.in --genome --out ~/gwasqc/output/12-13-2020/relatedness_steps/02toscan_relatedness
+```
+```{r}
+#Generating IBD Plot
+toscan_ibd <- read.table("~/mount/gwasqc/output/12-13-2020/relatedness_steps/02toscan_relatedness.genome",header=T)
+ggplot(data=toscan_ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+xlim(0,1)+ylim(0,1)
+```
+
+# 4 Check the heterozygosity distribution of samples and the existence of outlier samples
