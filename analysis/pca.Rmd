@@ -9,6 +9,7 @@ editor_options:
 
 ## Introduction
 
+# All Population
 ```{}
 plink --bfile ~/gwasqc/output/12-13-2020/relatedness_steps/04LD_pruned --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/merged_pca
 ```
@@ -36,3 +37,68 @@ ggplot() + geom_point(data=pcs,aes(x=PC1,y=PC3)) + theme_bw() + scale_colour_bre
 ggplot() + geom_point(data=pcs,aes(x=PC2,y=PC3)) + theme_bw() + scale_colour_brewer(palette="Set1") + ggtitle("PC2 vs PC3")
 ```
 
+# Gujarati Indian
+```{}
+plink --bfile ~/gwasqc/output/12-13-2020/separating_populations/05gujarati_indian_filtered_HWE --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01gujarati_indian_LD_prune_list.prune.in --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/gujarati_indian_pca
+```
+```{r}
+gujarati_indian_pcs <- read.table("~/mount/gwasqc/output/12-13-2020/PCA/gujarati_indian_pca.eigenvec",header=T)
+
+#PCA Plot 1 (PC1 vs PC2)
+ggplot() + geom_point(data=gujarati_indian_pcs,aes(x=PC1,y=PC2)) + theme_bw() + scale_colour_brewer(palette="Set1") + ggtitle("PC1 vs PC2")
+```
+
+# African
+```{}
+plink --bfile ~/gwasqc/output/12-13-2020/separating_populations/05african_filtered_HWE --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01african_LD_prune_list.prune.in --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/african_pca
+```
+```{r}
+african_pcs <- read.table("~/mount/gwasqc/output/12-13-2020/PCA/african_pca.eigenvec",header=T)
+
+#PCA Plot 1 (PC1 vs PC2)
+ggplot() + geom_point(data=african_pcs,aes(x=PC1,y=PC2)) + theme_bw() + scale_colour_brewer(palette="Set1") + ggtitle("PC1 vs PC2")
+```
+
+# East Asian
+```{}
+plink --bfile ~/gwasqc/output/12-13-2020/separating_populations/05east_asian_filtered_HWE --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01east_asian_LD_prune_list.prune.in --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/east_asian_pca
+```
+```{r}
+east_asian_pcs <- read.table("~/mount/gwasqc/output/12-13-2020/PCA/east_asian_pca.eigenvec",header=T)
+
+#PCA Plot 1 (PC1 vs PC2)
+ggplot() + geom_point(data=east_asian_pcs,aes(x=PC1,y=PC2)) + theme_bw() + scale_colour_brewer(palette="Set1") + ggtitle("PC1 vs PC2")
+```
+
+# Northwestern European
+```{}
+plink --bfile ~/gwasqc/output/12-13-2020/separating_populations/05northwestern_european_filtered_HWE --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01northwestern_european_LD_prune_list.prune.in --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/northwestern_european_pca
+```
+```{r}
+northwestern_european_pcs <- read.table("~/mount/gwasqc/output/12-13-2020/PCA/northwestern_european_pca.eigenvec",header=T)
+
+#PCA Plot 1 (PC1 vs PC2)
+ggplot() + geom_point(data=northwestern_european_pcs,aes(x=PC1,y=PC2)) + theme_bw() + scale_colour_brewer(palette="Set1") + ggtitle("PC1 vs PC2")
+```
+
+# Mexian
+```{}
+plink --bfile ~/gwasqc/output/12-13-2020/separating_populations/05mexican_filtered_HWE --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01mexican_LD_prune_list.prune.in --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/mexican_pca
+```
+```{r}
+mexican_pcs <- read.table("~/mount/gwasqc/output/12-13-2020/PCA/mexican_pca.eigenvec",header=T)
+
+#PCA Plot 1 (PC1 vs PC2)
+ggplot() + geom_point(data=mexican_pcs,aes(x=PC1,y=PC2)) + theme_bw() + scale_colour_brewer(palette="Set1") + ggtitle("PC1 vs PC2")
+```
+
+# Toscan
+```{}
+plink --bfile ~/gwasqc/output/12-13-2020/separating_populations/05toscan_filtered_HWE --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01toscan_LD_prune_list.prune.in --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/toscan_pca
+```
+```{r}
+toscan_pcs <- read.table("~/mount/gwasqc/output/12-13-2020/PCA/toscan_pca.eigenvec",header=T)
+
+#PCA Plot 1 (PC1 vs PC2)
+ggplot() + geom_point(data=toscan_pcs,aes(x=PC1,y=PC2)) + theme_bw() + scale_colour_brewer(palette="Set1") + ggtitle("PC1 vs PC2")
+```
