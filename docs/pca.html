@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-12-13
+<strong>Last updated:</strong> 2020-12-14
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtree4f2f9baca44b262b543bceb684079cd9911e77c8targetblank4f2f9baa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/hwittich/GWAS_QC/tree/4f2f9baca44b262b543bceb684079cd9911e77c8" target="_blank">4f2f9ba</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtree327deb5a27bcf84f8d477e80a9eb85e01165897btargetblank327deb5a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/hwittich/GWAS_QC/tree/327deb5a27bcf84f8d477e80a9eb85e01165897b" target="_blank">327deb5</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtree4f2f9baca44b262b543bceb684079cd9911e77c8targetblank4f2f9baa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomhwittichGWASQCtree327deb5a27bcf84f8d477e80a9eb85e01165897btargetblank327deb5a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/hwittich/GWAS_QC/tree/4f2f9baca44b262b543bceb684079cd9911e77c8" target="_blank">4f2f9ba</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/hwittich/GWAS_QC/tree/327deb5a27bcf84f8d477e80a9eb85e01165897b" target="_blank">327deb5</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -565,6 +565,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/327deb5a27bcf84f8d477e80a9eb85e01165897b/analysis/pca.Rmd" target="_blank">327deb5</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-12-14
+</td>
+<td>
+Performed PCA on separated populations
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/hwittich/GWAS_QC/d274857292dbc3a41816a96aa20dd022b7398fb8/docs/pca.html" target="_blank">d274857</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-12-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/hwittich/GWAS_QC/blob/4f2f9baca44b262b543bceb684079cd9911e77c8/analysis/pca.Rmd" target="_blank">4f2f9ba</a>
 </td>
 <td>
@@ -586,6 +620,9 @@ Completed PCA!
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
+</div>
+<div id="all-population" class="section level1">
+<h1>All Population</h1>
 <pre><code>plink --bfile ~/gwasqc/output/12-13-2020/relatedness_steps/04LD_pruned --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/merged_pca</code></pre>
 <p>Producing:<br />
 – merged_pca.eigenval<br />
@@ -599,15 +636,217 @@ skree &lt;- cbind.data.frame(skree,c(1,2,3,4,5,6,7,8,9,10))
 colnames(skree) &lt;- c(&quot;percent_var&quot;,&quot;PC&quot;)
 ggplot(data=skree, aes(x=PC, y=percent_var)) + geom_point() + geom_line() + scale_x_continuous(breaks = 1:10) + ggtitle(&quot;Proportion of variance explained&quot;)</code></pre>
 <p><img src="figure/pca.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
+Past versions of unnamed-chunk-1-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/d274857292dbc3a41816a96aa20dd022b7398fb8/docs/figure/pca.Rmd/unnamed-chunk-1-1.png" target="_blank">d274857</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-12-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#PCA Plot 1 (PC1 vs PC2)
 ggplot() + geom_point(data=pcs,aes(x=PC1,y=PC2)) + theme_bw() + scale_colour_brewer(palette=&quot;Set1&quot;) + ggtitle(&quot;PC1 vs PC2&quot;)</code></pre>
 <p><img src="figure/pca.Rmd/unnamed-chunk-1-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-2">
+Past versions of unnamed-chunk-1-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/d274857292dbc3a41816a96aa20dd022b7398fb8/docs/figure/pca.Rmd/unnamed-chunk-1-2.png" target="_blank">d274857</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-12-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#PCA Plot 2 (PC1 vs PC3)
 ggplot() + geom_point(data=pcs,aes(x=PC1,y=PC3)) + theme_bw() + scale_colour_brewer(palette=&quot;Set1&quot;) + ggtitle(&quot;PC1 vs PC3&quot;)</code></pre>
 <p><img src="figure/pca.Rmd/unnamed-chunk-1-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-3">
+Past versions of unnamed-chunk-1-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/d274857292dbc3a41816a96aa20dd022b7398fb8/docs/figure/pca.Rmd/unnamed-chunk-1-3.png" target="_blank">d274857</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-12-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#PCA Plot 1 (PC2 vs PC3)
 ggplot() + geom_point(data=pcs,aes(x=PC2,y=PC3)) + theme_bw() + scale_colour_brewer(palette=&quot;Set1&quot;) + ggtitle(&quot;PC2 vs PC3&quot;)</code></pre>
 <p><img src="figure/pca.Rmd/unnamed-chunk-1-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-4">
+Past versions of unnamed-chunk-1-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hwittich/GWAS_QC/blob/d274857292dbc3a41816a96aa20dd022b7398fb8/docs/figure/pca.Rmd/unnamed-chunk-1-4.png" target="_blank">d274857</a>
+</td>
+<td>
+Henry Wittich
+</td>
+<td>
+2020-12-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="gujarati-indian" class="section level1">
+<h1>Gujarati Indian</h1>
+<pre><code>plink --bfile ~/gwasqc/output/12-13-2020/separating_populations/05gujarati_indian_filtered_HWE --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01gujarati_indian_LD_prune_list.prune.in --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/gujarati_indian_pca</code></pre>
+<pre class="r"><code>gujarati_indian_pcs &lt;- read.table(&quot;~/mount/gwasqc/output/12-13-2020/PCA/gujarati_indian_pca.eigenvec&quot;,header=T)
+
+#PCA Plot 1 (PC1 vs PC2)
+ggplot() + geom_point(data=gujarati_indian_pcs,aes(x=PC1,y=PC2)) + theme_bw() + scale_colour_brewer(palette=&quot;Set1&quot;) + ggtitle(&quot;PC1 vs PC2&quot;)</code></pre>
+<p><img src="figure/pca.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="african" class="section level1">
+<h1>African</h1>
+<pre><code>plink --bfile ~/gwasqc/output/12-13-2020/separating_populations/05african_filtered_HWE --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01african_LD_prune_list.prune.in --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/african_pca</code></pre>
+<pre class="r"><code>african_pcs &lt;- read.table(&quot;~/mount/gwasqc/output/12-13-2020/PCA/african_pca.eigenvec&quot;,header=T)
+
+#PCA Plot 1 (PC1 vs PC2)
+ggplot() + geom_point(data=african_pcs,aes(x=PC1,y=PC2)) + theme_bw() + scale_colour_brewer(palette=&quot;Set1&quot;) + ggtitle(&quot;PC1 vs PC2&quot;)</code></pre>
+<p><img src="figure/pca.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="east-asian" class="section level1">
+<h1>East Asian</h1>
+<pre><code>plink --bfile ~/gwasqc/output/12-13-2020/separating_populations/05east_asian_filtered_HWE --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01east_asian_LD_prune_list.prune.in --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/east_asian_pca</code></pre>
+<pre class="r"><code>east_asian_pcs &lt;- read.table(&quot;~/mount/gwasqc/output/12-13-2020/PCA/east_asian_pca.eigenvec&quot;,header=T)
+
+#PCA Plot 1 (PC1 vs PC2)
+ggplot() + geom_point(data=east_asian_pcs,aes(x=PC1,y=PC2)) + theme_bw() + scale_colour_brewer(palette=&quot;Set1&quot;) + ggtitle(&quot;PC1 vs PC2&quot;)</code></pre>
+<p><img src="figure/pca.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="northwestern-european" class="section level1">
+<h1>Northwestern European</h1>
+<pre><code>plink --bfile ~/gwasqc/output/12-13-2020/separating_populations/05northwestern_european_filtered_HWE --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01northwestern_european_LD_prune_list.prune.in --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/northwestern_european_pca</code></pre>
+<pre class="r"><code>northwestern_european_pcs &lt;- read.table(&quot;~/mount/gwasqc/output/12-13-2020/PCA/northwestern_european_pca.eigenvec&quot;,header=T)
+
+#PCA Plot 1 (PC1 vs PC2)
+ggplot() + geom_point(data=northwestern_european_pcs,aes(x=PC1,y=PC2)) + theme_bw() + scale_colour_brewer(palette=&quot;Set1&quot;) + ggtitle(&quot;PC1 vs PC2&quot;)</code></pre>
+<p><img src="figure/pca.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="mexian" class="section level1">
+<h1>Mexian</h1>
+<pre><code>plink --bfile ~/gwasqc/output/12-13-2020/separating_populations/05mexican_filtered_HWE --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01mexican_LD_prune_list.prune.in --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/mexican_pca</code></pre>
+<pre class="r"><code>mexican_pcs &lt;- read.table(&quot;~/mount/gwasqc/output/12-13-2020/PCA/mexican_pca.eigenvec&quot;,header=T)
+
+#PCA Plot 1 (PC1 vs PC2)
+ggplot() + geom_point(data=mexican_pcs,aes(x=PC1,y=PC2)) + theme_bw() + scale_colour_brewer(palette=&quot;Set1&quot;) + ggtitle(&quot;PC1 vs PC2&quot;)</code></pre>
+<p><img src="figure/pca.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="toscan" class="section level1">
+<h1>Toscan</h1>
+<pre><code>plink --bfile ~/gwasqc/output/12-13-2020/separating_populations/05toscan_filtered_HWE --extract ~/gwasqc/output/12-13-2020/relatedness_steps/01toscan_LD_prune_list.prune.in --pca 10 header --out ~/gwasqc/output/12-13-2020/PCA/toscan_pca</code></pre>
+<pre class="r"><code>toscan_pcs &lt;- read.table(&quot;~/mount/gwasqc/output/12-13-2020/PCA/toscan_pca.eigenvec&quot;,header=T)
+
+#PCA Plot 1 (PC1 vs PC2)
+ggplot() + geom_point(data=toscan_pcs,aes(x=PC1,y=PC2)) + theme_bw() + scale_colour_brewer(palette=&quot;Set1&quot;) + ggtitle(&quot;PC1 vs PC2&quot;)</code></pre>
+<p><img src="figure/pca.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
