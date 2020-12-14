@@ -183,3 +183,23 @@ ggplot(data=toscan_ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+xlim(0,1
 ```
 
 # 4 Check the heterozygosity distribution of samples and the existence of outlier samples
+```{}
+plink --bed ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bed --bim ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bim --fam ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.fam --het --out ~/gwasqc/output/12-13-2020/relatedness_steps/03het_unfiltered
+```
+The --het flag computes observed and expected autosomal homozygous genotype counts for each sample, stored in the O(HOM) and E(HOM) columns of the .het file, respectively. Expected number of homozygotes are determined using imputed minor allele frequencies. 
+
+```{r}
+HET <- read.table("~/mount/gwasqc/output/12-13-2020/relatedness_steps/03het_unfiltered.het",header=T,as.is=T)
+H = (HET$N.NM. -HET$O.HOM.)/HET$N.NM.
+oldpar=par(mfrow=c(1,2))
+hist(H,50)
+hist(HET$F,50)
+```
+
+# 5 LD prune samples
+```{}
+plink --bed ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bed --bim ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.bim --fam ~/gwasqc/output/11-8-2020/missingness_hwe_steps/05filtered_HWE.fam --extract ~/gwasqc/output/11-16-2020/relatedness_steps/01LD_prune_list.prune.in --make-bed --out ~/gwasqc/output/12-13-2020/relatedness_steps/04LD_pruned
+```
+
+# 6 Optionally remove duplicate or related samples and regenerate homozygosity estimates from filtered samples
+For now, I am not doing this.
